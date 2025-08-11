@@ -309,6 +309,7 @@ async function sendMailsaveCertifcate(doc, pfx, isCustomMail, mailProvider, file
  */
 async function PDF(req) {
   const docId = req.params.docId;
+      console.log("🚀 ~ PDF ~ params:", req.params)
   const randomNumber = Math.floor(Math.random() * 5000);
   const pfxname = `keystore_${randomNumber}.pfx`;
   try {
@@ -354,6 +355,7 @@ async function PDF(req) {
     if (req.params.pdfFile) {
       //  `PdfBuffer` used to create buffer from pdf file
       let PdfBuffer = Buffer.from(req.params.pdfFile, 'base64');
+      console.log("🚀 ~ PDF ~ PdfBuffer:", PdfBuffer)
       //  `P12Buffer` used to create buffer from p12 certificate
       let pfxFile = process.env.PFX_BASE64;
       let passphrase = process.env.PASS_PHRASE;
