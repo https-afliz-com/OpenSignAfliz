@@ -354,19 +354,24 @@ async function PDF(req) {
     if (req.params.pdfFile) {
       //  `PdfBuffer` used to create buffer from pdf file
       let PdfBuffer = Buffer.from(req.params.pdfFile, 'base64');
-      console.log("🚀 ~ PDF ~ PdfBuffer:", PdfBuffer)
+      console.log("🚀 ~ PDF ~ PdfBuffer:1", PdfBuffer)
       //  `P12Buffer` used to create buffer from p12 certificate
       let pfxFile = process.env.PFX_BASE64;
+      console.log("🚀 ~ PDF ~ pfxFile:", pfxFile)
       let passphrase = process.env.PASS_PHRASE;
+      console.log("🚀 ~ PDF ~ passphrase:", passphrase)
       if (_resDoc?.ExtUserPtr?.TenantId?.PfxFile?.base64) {
         pfxFile = _resDoc?.ExtUserPtr?.TenantId?.PfxFile?.base64;
         passphrase = _resDoc?.ExtUserPtr?.TenantId?.PfxFile?.password;
       }
       const pfx = { name: pfxname, passphrase: passphrase };
+      console.log("🚀 ~ PDF ~ pfx:", pfx)
       const P12Buffer = Buffer.from(pfxFile, 'base64');
+      console.log("🚀 ~ PDF ~ P12Buffer:", P12Buffer)
       fs.writeFileSync(pfxname, P12Buffer);
       const UserPtr = { __type: 'Pointer', className: className, objectId: signUser.objectId };
       const obj = { UserPtr: UserPtr, SignedUrl: '', Activity: 'Signed', ipAddress: userIP };
+      console.log("🚀 ~ PDF ~ obj:", obj)
       let updateAuditTrail;
       if (_resDoc.AuditTrail && _resDoc.AuditTrail.length > 0) {
         updateAuditTrail = [..._resDoc.AuditTrail, obj];
