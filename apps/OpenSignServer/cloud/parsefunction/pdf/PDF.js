@@ -309,7 +309,6 @@ async function sendMailsaveCertifcate(doc, pfx, isCustomMail, mailProvider, file
  */
 async function PDF(req) {
   const docId = req.params.docId;
-      console.log("🚀 ~ PDF ~ params:", req.params)
   const randomNumber = Math.floor(Math.random() * 5000);
   const pfxname = `keystore_${randomNumber}.pfx`;
   try {
@@ -398,6 +397,7 @@ async function PDF(req) {
             ? signersName?.join(', ')
             : username + ' <' + userEmail + '>';
         const pdfDoc = await PDFDocument.load(PdfBuffer);
+        console.log("🚀 ~ PDF ~ pdfDoc:", pdfDoc)
         const form = pdfDoc.getForm();
         // Updates the field appearances to ensure visual changes are reflected.
         form.updateFieldAppearances();
@@ -414,7 +414,9 @@ async function PDF(req) {
           signatureLength: 16000,
         });
         const pdfWithPlaceholderBytes = await pdfDoc.save();
+        console.log("🚀 ~ PDF ~ pdfWithPlaceholderBytes:", pdfWithPlaceholderBytes)
         PdfBuffer = Buffer.from(pdfWithPlaceholderBytes);
+        console.log("🚀 ~ PDF ~ PdfBuffer:", PdfBuffer)
         //`new signPDF` create new instance of pdfBuffer and p12Buffer
         const OBJ = new SignPdf();
         // `signedDocs` is used to signpdf digitally
