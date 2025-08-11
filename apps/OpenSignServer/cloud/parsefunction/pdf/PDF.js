@@ -354,6 +354,7 @@ async function PDF(req) {
     if (req.params.pdfFile) {
       //  `PdfBuffer` used to create buffer from pdf file
       let PdfBuffer = Buffer.from(req.params.pdfFile, 'base64');
+      console.log("🚀 ~ PDF ~ PdfBuffer:", PdfBuffer)
       //  `P12Buffer` used to create buffer from p12 certificate
       let pfxFile = process.env.PFX_BASE64;
       let passphrase = process.env.PASS_PHRASE;
@@ -382,6 +383,7 @@ async function PDF(req) {
       } else {
         isCompleted = true;
       }
+      console.log("🚀 ~ PDF ~ isCompleted:", isCompleted)
       // below regex is used to replace all word with "_" except A to Z, a to z, numbers
       const docName = _resDoc?.Name?.replace(/[^a-zA-Z0-9._-]/g, '_')?.toLowerCase();
       const filename = docName?.length > 100 ? docName?.slice(0, 100) : docName;
@@ -389,6 +391,7 @@ async function PDF(req) {
       let filePath = `./exports/${name}`;
       let signedFilePath = `./exports/signed_${name}`;
       let pdfSize = PdfBuffer.length;
+      console.log("🚀 ~ PDF ~ pdfSize:", pdfSize)
       if (isCompleted) {
         const signersName = _resDoc.Signers?.map(x => x.Name + ' <' + x.Email + '>');
         const reason =
@@ -396,6 +399,7 @@ async function PDF(req) {
             ? signersName?.join(', ')
             : username + ' <' + userEmail + '>';
         const pdfDoc = await PDFDocument.load(PdfBuffer);
+        console.log("🚀 ~ PDF ~ pdfDoc:", pdfDoc)
         const form = pdfDoc.getForm();
         // Updates the field appearances to ensure visual changes are reflected.
         form.updateFieldAppearances();
@@ -412,7 +416,9 @@ async function PDF(req) {
           signatureLength: 16000,
         });
         const pdfWithPlaceholderBytes = await pdfDoc.save();
+        console.log("🚀 ~ PDF ~ pdfWithPlaceholderBytes:", pdfWithPlaceholderBytes)
         PdfBuffer = Buffer.from(pdfWithPlaceholderBytes);
+        console.log("🚀 ~ PDF ~ PdfBuffer:", PdfBuffer)
         //`new signPDF` create new instance of pdfBuffer and p12Buffer
         const OBJ = new SignPdf();
         // `signedDocs` is used to signpdf digitally
